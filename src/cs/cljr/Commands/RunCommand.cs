@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.CommandLine;
 using System.IO;
-using Clojure = clojure.lang;
+using System.Reflection;
+using clojure.clr.api;
+using clojure.lang;
 
 namespace cljr.Commands
 {
@@ -46,6 +48,10 @@ namespace cljr.Commands
 
     public static void HandleRunCommand ( string binary, string entryPoint, string [] args )
     {
+      Assembly.LoadFrom ( binary );
+      IFn main = Clojure.var(entryPoint, "-main");
+      object result = main.invoke ( args );
+
       Console.WriteLine ( "Binary: " + binary );
       Console.WriteLine ( "Entry Point: " + entryPoint );
       Console.WriteLine ( "Arguments: " );

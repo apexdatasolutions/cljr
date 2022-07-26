@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 using System.CommandLine;
 
-using Clojure = clojure.lang;
+using CljLang = clojure.lang;
+using clojure.clr.api;
 
 namespace cljr.Commands
 {
@@ -33,12 +34,12 @@ namespace cljr.Commands
 
     public static void HandleREPLRequest ( string [] args )
     {
-      Clojure.Symbol CLOJURE_MAIN = Clojure.Symbol.intern( "clojure.main" );
-      Clojure.Var REQUIRE = Clojure.RT.var( "clojure.core", "require" );
-      Clojure.Var MAIN = Clojure.RT.var( "clojure.main", "main" );
-      Clojure.RT.Init ();
+      CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
+      CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
+      CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
+      CljLang.RT.Init ();
       REQUIRE.invoke ( CLOJURE_MAIN );
-      MAIN.applyTo ( Clojure.RT.seq ( args ) );
+      MAIN.applyTo ( CljLang.RT.seq ( args ) );
     }
   }
 }
