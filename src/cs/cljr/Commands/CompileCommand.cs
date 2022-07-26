@@ -14,19 +14,17 @@ namespace cljr.Commands
   {
     public static Command Get ()
     {
-      Option <string []> libsOption
-        = new Option<string []> ( "libs", "The librares to provide to the Clojure compiler." )
+      Argument <string []> namespacesArgument
+        = new Argument<string[]> ( "nss", "One or more namespaces to be compiled." )
         {
-          IsRequired = false
-        , AllowMultipleArgumentsPerToken = true
-        , Arity = ArgumentArity.ZeroOrMore
+          Arity = ArgumentArity.ZeroOrMore
         };
       Command compileCommand
         = new Command ( "compile" , "Compile one or more namespaces.")
         {
-          libsOption
+          namespacesArgument
         };
-      compileCommand.SetHandler<string []> ( HandleCompileRequest, libsOption );
+      compileCommand.SetHandler<string []> ( HandleCompileRequest, namespacesArgument );
       return compileCommand;
     }
 

@@ -16,19 +16,19 @@ namespace cljr.Commands
 
     public static Command Get ()
     {
-      Option <string []> argsOption
-        = new Option<string []> ( "args", "The args to provide to the clojure main REPL." )
+      Argument <string []> argsArgument
+        = new Argument<string []> ( "args", "The args to provide to the clojure main REPL." )
         {
-          IsRequired = false
-        , AllowMultipleArgumentsPerToken = true
-        , Arity = ArgumentArity.ZeroOrMore
+        //  IsRequired = false
+        //, AllowMultipleArgumentsPerToken = true
+          Arity = ArgumentArity.ZeroOrMore
         };
       Command replCommand
         = new Command ( "repl", "Fire up an instance of the Clojure command line REPL." )
         {
-          argsOption
+          argsArgument
         };
-      replCommand.SetHandler<string []> ( HandleREPLRequest, argsOption );
+      replCommand.SetHandler<string []> ( HandleREPLRequest, argsArgument );
       return replCommand;
     }
 
