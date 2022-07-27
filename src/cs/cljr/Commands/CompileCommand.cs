@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.CommandLine;
-using Clojure = clojure.lang;
+using CljLang = clojure.lang;
 using System.IO;
 using System.Diagnostics;
 
@@ -37,10 +37,10 @@ namespace cljr.Commands
       const string REFLECTION_WARNING_PROP = "CLOJURE_COMPILE_WARN_ON_REFLECTION";
       const string UNCHECKED_MATH_PROP = "CLOJURE_COMPILE_UNCHECKED_MATH";
 
-      Clojure.RT.Init ();
+      CljLang.RT.Init ();
 
-      TextWriter outTW = (TextWriter)Clojure.RT.OutVar.deref();
-      TextWriter errTW = Clojure.RT.errPrintWriter();
+      TextWriter outTW = (TextWriter)CljLang.RT.OutVar.deref();
+      TextWriter errTW = CljLang.RT.errPrintWriter();
 
       string path = Environment.GetEnvironmentVariable(PATH_PROP);
 
@@ -54,18 +54,18 @@ namespace cljr.Commands
       if ( "true".Equals ( mathVal ) )
         uncheckedMath = true;
       else if ( "warn-on-boxed".Equals ( mathVal ) )
-        uncheckedMath = Clojure.Keyword.intern ( "warn-on-boxed" );
+        uncheckedMath = CljLang.Keyword.intern ( "warn-on-boxed" );
 
 
       // Force load to avoid transitive compilation during lazy load
-      Clojure.Compiler.EnsureMacroCheck ();
+      CljLang.Compiler.EnsureMacroCheck ();
 
       try
       {
-        Clojure.Var.pushThreadBindings ( Clojure.RT.map (
-            Clojure.Compiler.CompilePathVar, path,
-            Clojure.RT.WarnOnReflectionVar, warnOnReflection,
-            Clojure.RT.UncheckedMathVar, uncheckedMath
+        CljLang.Var.pushThreadBindings ( CljLang.RT.map (
+            CljLang.Compiler.CompilePathVar, path,
+            CljLang.RT.WarnOnReflectionVar, warnOnReflection,
+            CljLang.RT.UncheckedMathVar, uncheckedMath
             ) );
 
         Stopwatch sw = new Stopwatch();
@@ -78,7 +78,7 @@ namespace cljr.Commands
             sw.Start ();
             outTW.Write ( "Compiling {0} to {1}", lib, path );
             outTW.Flush ();
-            Clojure.Compiler.CompileVar.invoke ( Clojure.Symbol.intern ( lib ) );
+            CljLang.Compiler.CompileVar.invoke ( CljLang.Symbol.intern ( lib ) );
             sw.Stop ();
             outTW.WriteLine ( " -- {0} milliseconds.", sw.ElapsedMilliseconds );
           }
@@ -97,7 +97,7 @@ namespace cljr.Commands
       }
       finally
       {
-        Clojure.Var.popThreadBindings ();
+        CljLang.Var.popThreadBindings ();
         try
         {
           outTW.Flush ();

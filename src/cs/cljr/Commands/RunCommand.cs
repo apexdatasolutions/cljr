@@ -7,7 +7,7 @@ using System.CommandLine;
 using System.IO;
 using System.Reflection;
 using clojure.clr.api;
-using clojure.lang;
+using CljLang = clojure.lang;
 
 namespace cljr.Commands
 {
@@ -15,17 +15,20 @@ namespace cljr.Commands
   {
     public static Command Get ()
     {
+      /*
       Argument<string> binaryArgument = new Argument<string> (
         "binary",
         description: "The binary to run.")
       {
         Arity = ArgumentArity.ExactlyOne
       };
-      Argument<string> entryPointArgument = new Argument<string> (
-        "entry-point",
-        description: "Pointer to a static class that contains a static main method.")
+      */
+      Option<string> entryPointArgument = new Option<string> (
+        "-m",
+        description: "Namespace containing a '-main' entry point.")
       {
         Arity = ArgumentArity.ExactlyOne
+      , IsRequired = true
       };
 
       Argument < string []> argsArgument = new Argument<string[]>
@@ -37,29 +40,28 @@ namespace cljr.Commands
       Command runCommand
         = new Command ( "run", "Run a program from a main entry point.")
         {
-          binaryArgument
-        , entryPointArgument
+          entryPointArgument
         , argsArgument
         };
-      runCommand.SetHandler<string, string, string []> 
-        (HandleRunCommand, binaryArgument, entryPointArgument, argsArgument );
+      runCommand.SetHandler<string, string []> 
+        (HandleRunCommand, entryPointArgument, argsArgument );
       return runCommand;
     }
 
-    public static void HandleRunCommand ( string binary, string entryPoint, string [] args )
+    public static void HandleRunCommand ( string entryPoint, string [] args )
     {
-      Assembly.LoadFrom ( binary );
-      IFn main = Clojure.var(entryPoint, "-main");
-      object result = main.invoke ( args );
+      CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
+      CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
+      CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
+      CljLang.RT.Init ();
+      REQUIRE.invoke ( CLOJURE_MAIN );
 
-      Console.WriteLine ( "Binary: " + binary );
-      Console.WriteLine ( "Entry Point: " + entryPoint );
-      Console.WriteLine ( "Arguments: " );
-      foreach ( string arg in args )
-      {
-        Console.WriteLine ( "  " + arg );
-      }
-      Console.WriteLine ( "I would run your program, if only I knew how!" );
+      List<String> actualArgs = new List<String> ();
+      actualArgs.Add ( "-m" );
+      actualArgs.Add ( entryPoint );
+      actualArgs.AddRange ( args );
+      MAIN.applyTo ( CljLang.RT.seq ( actualArgs.ToArray() ) );
+
     }
   }
 }
