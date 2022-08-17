@@ -37,9 +37,19 @@ namespace cljr.Commands
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
-      CljLang.RT.Init ();
-      REQUIRE.invoke ( CLOJURE_MAIN );
-      MAIN.applyTo ( CljLang.RT.seq ( args ) );
+      restart:
+      try
+      {
+        CljLang.RT.Init ();
+        REQUIRE.invoke ( CLOJURE_MAIN );
+        MAIN.applyTo ( CljLang.RT.seq ( args ) );
+      }
+      catch ( Exception ex )
+      {
+        Console.WriteLine ( ex.ToString () );
+        Console.WriteLine ( "Restarting the REPL..." );
+        goto restart;
+      }
     }
   }
 }

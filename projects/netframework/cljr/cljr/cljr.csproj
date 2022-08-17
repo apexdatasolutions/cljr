@@ -33,126 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clojure.clr.io.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.clr.io.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.clr.shell.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.clr.shell.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core.protocols.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core.protocols.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core.reducers.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core.reducers.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core.server.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core.server.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core_clr.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core_clr.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core_deftype.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core_deftype.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core_print.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core_print.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.core_proxy.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.core_proxy.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.data.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.data.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.datafy.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.datafy.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.edn.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.edn.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.genclass.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.genclass.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.gvec.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.gvec.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.instant.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.instant.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.main.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.main.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.math.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.math.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.cl_format.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.cl_format.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.column_writer.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.column_writer.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.dispatch.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.dispatch.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.pprint_base.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.pprint_base.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.pretty_writer.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.pretty_writer.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.print_table.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.print_table.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.pprint.utilities.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.pprint.utilities.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.reflect.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.reflect.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.reflect.clr.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.reflect.clr.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.repl.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.repl.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.set.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.set.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.stacktrace.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.stacktrace.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.string.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.string.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.template.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.template.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.test.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.test.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.test.junit.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.test.junit.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.test.tap.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.test.tap.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.tools.reader">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.tools.reader.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.uuid.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.uuid.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.walk.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.walk.clj.dll</HintPath>
-    </Reference>
-    <Reference Include="clojure.zip.clj">
-      <HintPath>..\..\..\..\..\clojure-clr\Clojure\Clojure.Main461\bin\Release\net461\clojure.zip.clj.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -174,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Clojure">
-      <Version>1.11.0-beta1</Version>
+      <Version>1.11.0-beta3</Version>
     </PackageReference>
     <PackageReference Include="NuGet.CommandLine">
       <Version>6.2.1</Version>
