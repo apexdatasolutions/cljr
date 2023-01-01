@@ -30,8 +30,8 @@ namespace cljr.Commands
 
     public static void HandleCompileRequest ( string [] libs )
     {
-#if NET6_0
-      Console.WriteLine ( "Compiling is not supported on .NET 6.0 yet." );
+#if NET5_0_OR_GREATER
+      Console.WriteLine ( "Compiling is not supported on .NET 5.0 or greater yet." );
 #else
       const string PATH_PROP = "CLOJURE_COMPILE_PATH";
       const string REFLECTION_WARNING_PROP = "CLOJURE_COMPILE_WARN_ON_REFLECTION";
@@ -93,6 +93,7 @@ namespace cljr.Commands
       catch ( Exception e )
       {
         errTW.WriteLine ( e.ToString () );
+        errTW.Flush ();
         Environment.Exit ( 1 );
       }
       finally
@@ -105,6 +106,7 @@ namespace cljr.Commands
         catch ( IOException e )
         {
           errTW.WriteLine ( e.StackTrace );
+          errTW.Flush ();
         }
       }
 
