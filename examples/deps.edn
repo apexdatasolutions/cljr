@@ -1,0 +1,26 @@
+{:paths ["src/main/"]
+
+ :clr-deps
+ {AccelerateDB.Data {:local/root :cljr-appdir}
+  dotNetRdf {:local/root :cljr-appdir}
+  dotNetRdf.Query.FullText {:local/root :cljr-appdir}
+  InterSystems.Data.IRISClient
+  {:local/root
+   "C:\\InterSystems\\IRISHealth\\dev\\dotnet\\bin\\v4.5\\"}
+  Microsoft.Office.Interop.Excel {:local/root :cljr-appdir}
+  Microsoft.Data.Sqlite {:local/root :cljr-appdir}
+  Serilog {:local/root :cljr-appdir}
+  Serilog.Sinks.Async {:local/root :cljr-appdir}
+  Serilog.Sinks.Console {:local/root :cljr-appdir}
+  Serilog.Sinks.File {:local/root :cljr-appdir}
+  Sylvan.Common {:local/root :cljr-appdir}
+  Sylvan.Data.Csv {:local/root :cljr-appdir}
+  WatsonWebserver {:local/root :cljr-appdir}
+  }
+
+ :clr-aliases
+ {}
+
+ :nuget/repos []
+
+ }
