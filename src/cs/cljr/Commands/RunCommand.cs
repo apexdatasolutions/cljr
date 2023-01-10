@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using System.CommandLine;
 using System.IO;
 using System.Reflection;
-using clojure.clr.api;
-using CljLang = clojure.lang;
 
 namespace cljr.Commands
 {
@@ -50,18 +48,7 @@ namespace cljr.Commands
 
     public static void HandleRunCommand ( string entryPoint, string [] args )
     {
-      CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
-      CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
-      CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
-      CljLang.RT.Init ();
-      REQUIRE.invoke ( CLOJURE_MAIN );
-
-      List<String> actualArgs = new List<String> ();
-      actualArgs.Add ( "-m" );
-      actualArgs.Add ( entryPoint );
-      actualArgs.AddRange ( args );
-      MAIN.applyTo ( CljLang.RT.seq ( actualArgs.ToArray() ) );
-
+      cljr.runtime.Main.Run ( entryPoint, args );
     }
   }
 }

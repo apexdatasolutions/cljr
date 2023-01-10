@@ -47,5 +47,15 @@ namespace cljr.runtime
     {
       return Eval ( src );
     }
+
+    public static void CompileNamespace ( string nameSpace )
+    {
+
+    }
+
+    public static void CompileFile ( string fileName )
+    {
+
+    }
   }
 }
