@@ -81,11 +81,17 @@ namespace cljr.runtime
       {
         if ( rs is Clojure.PersistentArrayMap arrayMapOfRepos )
         {
-          //todo
+          foreach (var repo in arrayMapOfRepos )
+          {
+            //
+          }
         }
         else if ( rs is Clojure.PersistentHashMap hashMapOfRepos )
         {
-          //todo
+          foreach ( var repo in hashMapOfRepos )
+          {
+            //
+          }
         }
       }
     }
