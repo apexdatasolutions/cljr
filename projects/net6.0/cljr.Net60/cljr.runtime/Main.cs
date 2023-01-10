@@ -10,6 +10,10 @@ namespace cljr.runtime
 {
   public static class Main
   {
+    // assuming we're working from the root where deps.edn is...
+    public static string DefaultBinaryPath = 
+      Directory.GetCurrentDirectory() + "\\target\\assemblies";
+
     public static void Run ( string entryPoint, string [] args )
     {
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
@@ -61,7 +65,7 @@ namespace cljr.runtime
 
       string path = Environment.GetEnvironmentVariable(PATH_PROP);
 
-      path = path ?? ".";
+      path = path ?? DefaultBinaryPath;
 
       string warnVal =  Environment.GetEnvironmentVariable(REFLECTION_WARNING_PROP);
       bool warnOnReflection = warnVal == null ? false : warnVal.Equals("true");

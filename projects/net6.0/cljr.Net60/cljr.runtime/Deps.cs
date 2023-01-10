@@ -15,7 +15,7 @@ namespace cljr.runtime
   public static class Deps
   {
     private static string _dirSep = Path.DirectorySeparatorChar.ToString();
-    private static bool _isInitialized = false;
+    //private static bool _isInitialized = false;
 
     public static List<Clojure.PersistentArrayMap> NugetRepos = 
       new List<Clojure.PersistentArrayMap>();
@@ -136,15 +136,15 @@ namespace cljr.runtime
     /// Evaluates a deps.edn source file (or source in text form, e.g., from
     /// embedded resources).
     /// </summary>
-    /// <param name="fileNameOrSource"></param>
+    /// <param name="filePathOrSource"></param>
     /// <returns></returns>
-    public static bool EvaluateDepsFileOrSource ( string fileNameOrSource )
+    public static bool EvaluateDepsFileOrSource ( string filePathOrSource )
     {
       bool result = true;
       try
       {
-        string ednText = File.Exists ( fileNameOrSource ) ? System.IO.File.ReadAllText ( fileNameOrSource ) 
-                                                          : fileNameOrSource;
+        string ednText = File.Exists ( filePathOrSource ) ? System.IO.File.ReadAllText ( filePathOrSource ) 
+                                                          : filePathOrSource;
         if ( !String.IsNullOrEmpty ( ednText ) )
         {
           Clojure.PersistentHashMap opts =
@@ -270,9 +270,38 @@ namespace cljr.runtime
     /// <summary>
     /// Loads required assemblies based on the source path.
     /// </summary>
-    public static void Load ()
-    { 
-      //AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblyHandler;
+    public static void LoadDeps ()
+    {
+      // For now, load them where we find them. In the future, perhaps move them to a local
+      // directory from which everything can be run.
+      foreach ( string path in LocalDepsPaths )
+      {
+        Console.WriteLine ( "Loading " + path );
+        try
+        {
+          Assembly.LoadFrom ( path );
+        }
+        catch ( Exception ex )
+        {
+          try
+          {
+            if ( path.StartsWith ( "System." ) )
+            {
+              string shortName = path.Replace ( ".dll", "" );
+              Assembly.Load ( shortName );
+            }
+            else
+            {
+              Assembly.Load ( path );
+            }
+          }
+          catch ( Exception ex1 )
+          {
+            Console.WriteLine ( "WARNING: " + ex1.Message );
+          }
+        }
+      }
+      // TODO: load any locally compiled (i.e., in 'targets/assemblies'), git, or nuget-based assemblies
 
     }
 
