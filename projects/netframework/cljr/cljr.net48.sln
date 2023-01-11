@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cljr", "cljr\cljr.csproj", "{520706DD-D8CA-41C1-867A-5B895EFD3319}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cljr.runtime", "cljr.runtime\cljr.runtime.csproj", "{341D6246-8AAB-4A3E-B20A-06561F0C7AFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{520706DD-D8CA-41C1-867A-5B895EFD3319}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{520706DD-D8CA-41C1-867A-5B895EFD3319}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{520706DD-D8CA-41C1-867A-5B895EFD3319}.Release|Any CPU.Build.0 = Release|Any CPU
+		{341D6246-8AAB-4A3E-B20A-06561F0C7AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{341D6246-8AAB-4A3E-B20A-06561F0C7AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{341D6246-8AAB-4A3E-B20A-06561F0C7AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{341D6246-8AAB-4A3E-B20A-06561F0C7AFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

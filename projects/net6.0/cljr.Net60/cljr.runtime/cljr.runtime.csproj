@@ -1,10 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Deps.cs" Link="Deps.cs" />
+    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Main.cs" Link="Main.cs" />
+    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Source.cs" Link="Source.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Properties\deps.edn" Link="deps.edn" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Clojure" Version="1.12.0-alpha2" />

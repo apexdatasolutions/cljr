@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using clojure.lang;
-using System.Reflection.Metadata;
+//using System.Reflection.Metadata;
 
 namespace cljr.runtime
 {

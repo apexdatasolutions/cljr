@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using clojure.clr.api;
 using CljLang = clojure.lang;
+using System.IO;
+using System.Diagnostics;
 
 namespace cljr.runtime
 {

@@ -1,0 +1,8 @@
+﻿{:paths ["src"]
+ :clr-deps {
+   Clojure {:nuget/version "1.12.0-alpha2"}
+ }
+ :nuget/repos {
+  "nuget.org" {:url "https://api.nuget.org/v3/index.json"}
+ }
+}

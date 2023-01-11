@@ -7,14 +7,19 @@ using clojure.clr.api;
 using System.Collections.Generic;
 using System.Configuration.Assemblies;
 using System.ComponentModel.Design.Serialization;
+using System.Security.Permissions;
+using System.Resources;
+using System.IO;
 
 namespace cljr.runtime
 {
   public static class Deps
   {
     private static string _dirSep = Path.DirectorySeparatorChar.ToString();
-    private static bool _isInitialized = false;
+    //private static bool _isInitialized = false;
 
+    public static List<Clojure.PersistentArrayMap> NugetRepos = 
+      new List<Clojure.PersistentArrayMap>();
     public static List<String> SourcePaths = new List<String>();
     public static List<String> LocalDepsPaths = new List<String>();
     public static AssemblyName [] ReferencedAssemblies =
@@ -27,58 +32,120 @@ namespace cljr.runtime
       Clojure.Keyword.intern ( "paths" );
     public static Clojure.Keyword ClrDepsKeyword = 
       Clojure.Keyword.intern ( "clr-deps" );
+    public static Clojure.Keyword ClrDepsPrepLibKeyword =
+      Clojure.Keyword.intern ( "clr-deps/prep-lib" );
     public static Clojure.Keyword ClrAliasesKeyword = 
       Clojure.Keyword.intern ( "clr-aliases" );
+    public static Clojure.Keyword ClrToolsUsageKeyword =
+      Clojure.Keyword.intern ( "clr-tools/usage" );
     public static Clojure.Keyword NugetReposKeyword = 
       Clojure.Keyword.intern ( "nuget/repos" );
+    public static Clojure.Keyword NugetLocalRepoKeyword =
+      Clojure.Keyword.intern ( "nuget/local-repo");
 
-    public static Dictionary<String,Clojure.Keyword> toplevelKeywords = 
-      new Dictionary<String,Clojure.Keyword> ()
-    {
-      { "paths", PathsKeyword }
-    , { "clr-deps", ClrDepsKeyword }
-    , { "clr-aliases", ClrAliasesKeyword }
-    , { "nuget-repos", NugetReposKeyword }
-    };
+    // aliases keywords
+    public static Clojure.Keyword MainOptsKeyword =
+      Clojure.Keyword.intern ( "main-opts" );
 
     // deps keywords
     public static Clojure.Keyword LocalRootKeyword = 
       Clojure.Keyword.intern ( "local/root" );
+    public static Clojure.Keyword GitUrlKeyword =
+      Clojure.Keyword.intern ( "git/url" );
+    public static Clojure.Keyword GitTagKeyword =
+      Clojure.Keyword.intern ( "git/tag" );
+    public static Clojure.Keyword GitShaKeyword =
+      Clojure.Keyword.intern ( "git/sha" );
     public static Clojure.Keyword NugetVersionKeyword = 
       Clojure.Keyword.intern ( "nuget/version" );
+    public static Clojure.Keyword ExtraDepsKeyword =
+      Clojure.Keyword.intern ( "extra-deps" );
+    public static Clojure.Keyword OverrideDepsKeyword =
+      Clojure.Keyword.intern ( "override-deps" );
+    public static Clojure.Keyword DefaultDepsKeyword =
+      Clojure.Keyword.intern ( "default-deps" );
+    public static Clojure.Keyword ReplaceDepsKeyword =
+      Clojure.Keyword.intern ( "replace-deps" );
+
     public static Clojure.Keyword AppDirKeyword = 
-      Clojure.Keyword.intern ( "cljr-appdir" );
+      Clojure.Keyword.intern ( "cljr-appdir" ); // built in alias for location of cljr binaries
+
+    // nuget/repos keywords
 
     public static string AppDirPath = AppDomain.CurrentDomain.BaseDirectory;
     public static string DepsFileName = "deps.edn";
 
     private static void AddRepos ( Clojure.PersistentArrayMap deps )
     {
-
+      var rs = deps [ NugetReposKeyword ];
+      if ( null != rs )
+      {
+        if ( rs is Clojure.PersistentArrayMap arrayMapOfRepos )
+        {
+          foreach (var repo in arrayMapOfRepos )
+          {
+            //
+          }
+        }
+        else if ( rs is Clojure.PersistentHashMap hashMapOfRepos )
+        {
+          foreach ( var repo in hashMapOfRepos )
+          {
+            //
+          }
+        }
+      }
     }
 
     private static void AddAliases ( Clojure.PersistentArrayMap deps )
     {
-
+      var aliases = deps [ ClrAliasesKeyword ];
+      if ( null != aliases )
+      {
+        if ( aliases is Clojure.PersistentArrayMap arrayMapAliases )
+        {
+          //todo
+        }
+      }
     }
 
     private static void AddPaths ( Clojure.PersistentArrayMap deps )
     {
-
+      var ps = deps [ PathsKeyword ];
+      if ( null != ps )
+      {
+        if ( ps is Clojure.PersistentVector pathsVector )
+        {
+          //todo
+        }
+      }
     }
 
     private static void AddDependencies ( Clojure.PersistentArrayMap deps )
     {
-
+      var ds = deps [ ClrDepsKeyword ];
+      if ( null != ds )
+      {
+        if ( ds is Clojure.PersistentArrayMap arrayMapDependencies )
+        {
+          // todo
+        }
+      }
     }
 
-    public static bool EvaluateDepsFileOrSource ( string fileNameOrSource )
+    /// <summary>
+    /// Evaluates a deps.edn source file (or source in text form, e.g., from
+    /// embedded resources).
+    /// </summary>
+    /// <param name="filePathOrSource"></param>
+    /// <returns></returns>
+    public static bool EvaluateDepsFileOrSource ( string filePathOrSource )
     {
       bool result = true;
       try
       {
-        string ednText = File.Exists ( fileNameOrSource ) ? System.IO.File.ReadAllText ( fileNameOrSource ) 
-                                                          : fileNameOrSource;
+        string ednText = File.Exists ( filePathOrSource ) ? System.IO.File.ReadAllText ( filePathOrSource ) 
+                                                          : filePathOrSource;
         if ( !String.IsNullOrEmpty ( ednText ) )
         {
           Clojure.PersistentHashMap opts =
@@ -86,6 +153,22 @@ namespace cljr.runtime
 
           Clojure.PersistentArrayMap deps =
             (Clojure.PersistentArrayMap) Clojure.EdnReader.readString ( ednText, opts );
+
+          if ( deps.ContainsKey ( NugetLocalRepoKeyword ) )
+          {
+            var localRepo = deps [ NugetLocalRepoKeyword ];
+            if ( localRepo != null )
+            {
+              if ( localRepo is Clojure.PersistentHashMap hashMapOfRepos )
+              {
+                //
+              }
+              else if ( localRepo is Clojure.PersistentArrayMap arrayMapOfRepos )
+              {
+                //
+              }
+            }            
+          }
           
           // load repos
           if ( deps.ContainsKey ( NugetReposKeyword ) )
@@ -131,7 +214,7 @@ namespace cljr.runtime
     public static bool Check ()
     {
       bool result = false;
-      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblyHandler;
+      //AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblyHandler;
 
       // root deps file
       string rootDeps = AppDirPath + _dirSep + DepsFileName;
@@ -139,9 +222,17 @@ namespace cljr.runtime
       {
         EvaluateDepsFileOrSource ( rootDeps );
       }
+      else
+      {
+        String resVal = cljr.runtime.Properties.Resources.deps_edn.ToString();
+        if ( !string.IsNullOrEmpty (resVal) )
+        {
+          EvaluateDepsFileOrSource ( resVal );
+        }
+      }
       // user deps file
-      string? cljConfig = Environment.GetEnvironmentVariable ( "CLJ_CONFIG" );
-      string? xdgConfig = Environment.GetEnvironmentVariable ( "XDG_CONFIG_HOME" );
+      string cljConfig = Environment.GetEnvironmentVariable ( "CLJ_CONFIG" );
+      string xdgConfig = Environment.GetEnvironmentVariable ( "XDG_CONFIG_HOME" );
       string userDirPath = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
       string userDeps = userDirPath + _dirSep + ".clojure" + _dirSep + DepsFileName;
       bool userDepsFound = false;
@@ -180,12 +271,42 @@ namespace cljr.runtime
     /// <summary>
     /// Loads required assemblies based on the source path.
     /// </summary>
-    public static void Load ()
-    { 
-      AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblyHandler;
+    public static void LoadDeps ()
+    {
+      // For now, load them where we find them. In the future, perhaps move them to a local
+      // directory from which everything can be run.
+      foreach ( string path in LocalDepsPaths )
+      {
+        Console.WriteLine ( "Loading " + path );
+        try
+        {
+          Assembly.LoadFrom ( path );
+        }
+        catch ( Exception ex )
+        {
+          try
+          {
+            if ( path.StartsWith ( "System." ) )
+            {
+              string shortName = path.Replace ( ".dll", "" );
+              Assembly.Load ( shortName );
+            }
+            else
+            {
+              Assembly.Load ( path );
+            }
+          }
+          catch ( Exception ex1 )
+          {
+            Console.WriteLine ( "WARNING: " + ex1.Message );
+          }
+        }
+      }
+      // TODO: load any locally compiled (i.e., in 'targets/assemblies'), git, or nuget-based assemblies
 
     }
 
+    /*
     /// <summary>
     /// Handler to help resolve assemblies.
     /// </summary>
@@ -218,5 +339,6 @@ namespace cljr.runtime
       }
       
     }
+    */
   }
 }
