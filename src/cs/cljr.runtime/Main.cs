@@ -23,7 +23,10 @@ namespace cljr.runtime
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
       CljLang.RT.Init ();
       REQUIRE.invoke ( CLOJURE_MAIN );
-
+      if ( Deps.Check() )
+      {
+        Deps.LoadDeps();
+      }
       List<String> actualArgs = new List<String> ();
       actualArgs.Add ( "-m" );
       actualArgs.Add ( entryPoint );
@@ -40,6 +43,10 @@ namespace cljr.runtime
       try
       {
         CljLang.RT.Init ();
+        if (Deps.Check())
+        {
+          Deps.LoadDeps();
+        }
         REQUIRE.invoke ( CLOJURE_MAIN );
         MAIN.applyTo ( CljLang.RT.seq ( args ) );
       }

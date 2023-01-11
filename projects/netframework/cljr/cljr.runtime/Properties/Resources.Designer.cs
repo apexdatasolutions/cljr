@@ -61,12 +61,18 @@ namespace cljr.runtime.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to {:paths [&quot;src&quot;]
+        /// :clr-deps {
+        ///   Clojure {:nuget/version &quot;1.12.0-alpha2&quot;}
+        /// }
+        /// :nuget/repos {
+        ///  &quot;nuget.org&quot; {:url &quot;https://api.nuget.org/v3/index.json&quot;}
+        /// }
+        ///}.
         /// </summary>
-        internal static byte[] deps_edn {
+        internal static string deps_edn {
             get {
-                object obj = ResourceManager.GetObject("deps_edn", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("deps.edn", resourceCulture);
             }
         }
     }
