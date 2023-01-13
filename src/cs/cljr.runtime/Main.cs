@@ -14,7 +14,7 @@ namespace cljr.runtime
   {
     // assuming we're working from the root where deps.edn is...
     public static string DefaultBinaryPath = 
-      Directory.GetCurrentDirectory() + "\\target\\assemblies";
+      Directory.GetCurrentDirectory() + "\\target\\assemblies\\";
 
     public static void Run ( string entryPoint, string [] args )
     {
