@@ -18,8 +18,7 @@ namespace cljr.runtime
     private static string _dirSep = Path.DirectorySeparatorChar.ToString();
     //private static bool _isInitialized = false;
 
-    public static List<Clojure.PersistentArrayMap> NugetRepos =
-      new List<Clojure.PersistentArrayMap>();
+    public static Dictionary<String,Object> NugetRepos = new Dictionary<String,Object>();
     public static List<String> SourcePaths = new List<String>();
     public static List<String> LocalDepsPaths = new List<String>();
     public static AssemblyName[] ReferencedAssemblies =
@@ -84,14 +83,18 @@ namespace cljr.runtime
         {
           foreach (var repo in arrayMapOfRepos)
           {
-            //
+            string key = repo.Key.ToString();
+            var value = repo.Value;
+            NugetRepos.Add(key, value);  
           }
         }
         else if (rs is Clojure.PersistentHashMap hashMapOfRepos)
         {
           foreach (var repo in hashMapOfRepos)
           {
-            //
+            string key = repo.Key.ToString();
+            var value = repo.Value;
+            NugetRepos.Add(key, value);
           }
         }
       }
