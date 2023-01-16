@@ -21,6 +21,7 @@ namespace cljr.runtime
     public static Dictionary<String,Object> NugetRepos = new Dictionary<String,Object>();
     public static List<String> SourcePaths = new List<String>();
     public static List<String> LocalDepsPaths = new List<String>();
+    public static Dictionary<String,Object> Aliases = new Dictionary<String,Object>();  
     public static AssemblyName[] ReferencedAssemblies =
         Assembly.GetExecutingAssembly().GetReferencedAssemblies();
 
@@ -105,9 +106,14 @@ namespace cljr.runtime
       var aliases = deps[ClrAliasesKeyword];
       if (null != aliases)
       {
-        if (aliases is Clojure.PersistentArrayMap arrayMapAliases)
+        if (aliases is Clojure.APersistentMap aMapOfAliases)
         {
-          //todo
+          foreach (var alias in aMapOfAliases)
+          {
+            string key = alias.Key.ToString();
+            var value = alias.Value;
+            Aliases.Add(key, value);
+          }
         }
       }
     }
@@ -129,6 +135,33 @@ namespace cljr.runtime
             SourcePaths.Add ( pathString );
           }
           // else if path is a keyword (pointing presumably to another persistent vector or string)
+          else if (path is Clojure.Keyword keyword )
+          {
+            string key = keyword.ToString();
+            if (Aliases.ContainsKey(key))
+            {
+              object val = Aliases[key];
+              if (val is string strVal )
+              {
+                if (Directory.Exists(strVal))
+                {
+                  SourcePaths.Add( strVal );
+                }
+              }
+              else if (val is Clojure.PersistentVector vectorVal )
+              {
+                foreach (var item in vectorVal )
+                {
+                  if (item is string strPath )
+                  {
+                    if (Directory.Exists (strPath))
+                    {
+                      SourcePaths.Add ( strPath );
+                    }
+                  } 
+                }
+              }
+            }
         }
       }
     }
@@ -176,6 +209,20 @@ namespace cljr.runtime
                     else
                     {
                       Console.WriteLine("WARNING: Assembly not found: " + assemblyPath);
+                    }
+                  }
+                  else if ( Aliases.ContainsKey ( keyword.ToString() ) )
+                  {
+                    if (Aliases[keyword.ToString()] is String stringValue )
+                    {
+                      if (Directory.Exists (stringValue ) )
+                      {
+                        string assemblyPath = stringValue + depKey + ".dll";
+                        if (File.Exists (assemblyPath) )
+                        {
+                          LocalDepsPaths.Add(assemblyPath);
+                        }
+                      }
                     }
                   }
                   // what else might it be?
