@@ -80,22 +80,13 @@ namespace cljr.runtime
       var rs = deps[NugetReposKeyword];
       if (null != rs)
       {
-        if (rs is Clojure.PersistentArrayMap arrayMapOfRepos)
+        if (rs is Clojure.APersistentMap aMapOfRepos)
         {
-          foreach (var repo in arrayMapOfRepos)
+          foreach (var repo in aMapOfRepos)
           {
             string key = repo.Key.ToString();
             var value = repo.Value;
             NugetRepos.Add(key, value);  
-          }
-        }
-        else if (rs is Clojure.PersistentHashMap hashMapOfRepos)
-        {
-          foreach (var repo in hashMapOfRepos)
-          {
-            string key = repo.Key.ToString();
-            var value = repo.Value;
-            NugetRepos.Add(key, value);
           }
         }
       }
@@ -130,38 +121,39 @@ namespace cljr.runtime
         SourcePaths.Clear(); // to preserve clj semantics that require only the last deps.edn paths to be respected.
         foreach ( var path in ps )
         {
-          if (path is String pathString )
+          if (path is String pathString)
           {
-            SourcePaths.Add ( pathString );
+            SourcePaths.Add(pathString);
           }
           // else if path is a keyword (pointing presumably to another persistent vector or string)
-          else if (path is Clojure.Keyword keyword )
+          else if (path is Clojure.Keyword keyword)
           {
             string key = keyword.ToString();
             if (Aliases.ContainsKey(key))
             {
               object val = Aliases[key];
-              if (val is string strVal )
+              if (val is string strVal)
               {
                 if (Directory.Exists(strVal))
                 {
-                  SourcePaths.Add( strVal );
+                  SourcePaths.Add(strVal);
                 }
               }
-              else if (val is Clojure.PersistentVector vectorVal )
+              else if (val is Clojure.PersistentVector vectorVal)
               {
-                foreach (var item in vectorVal )
+                foreach (var item in vectorVal)
                 {
-                  if (item is string strPath )
+                  if (item is string strPath)
                   {
-                    if (Directory.Exists (strPath))
+                    if (Directory.Exists(strPath))
                     {
-                      SourcePaths.Add ( strPath );
+                      SourcePaths.Add(strPath);
                     }
-                  } 
+                  }
                 }
               }
             }
+          }
         }
       }
     }
