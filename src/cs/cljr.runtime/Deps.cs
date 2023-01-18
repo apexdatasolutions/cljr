@@ -266,11 +266,7 @@ namespace cljr.runtime
             var localRepo = deps[NugetLocalRepoKeyword];
             if (localRepo != null)
             {
-              if (localRepo is Clojure.PersistentHashMap hashMapOfRepos)
-              {
-                //
-              }
-              else if (localRepo is Clojure.PersistentArrayMap arrayMapOfRepos)
+              if (localRepo is Clojure.APersistentMap aMapOfRepos)
               {
                 //
               }
@@ -414,39 +410,5 @@ namespace cljr.runtime
 
     }
 
-    /*
-    /// <summary>
-    /// Handler to help resolve assemblies.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
-    /// <returns></returns>
-#if NET6_0_OR_GREATER
-    public static Assembly? ResolveAssemblyHandler ( object? sender, ResolveEventArgs args )
-#else
-    public static Assembly ResolveAssemblyHandler (object sender, ResolveEventArgs args )
-#endif
-    {
-      foreach ( AssemblyName referencedAssembly in ReferencedAssemblies )
-      {
-        if ( referencedAssembly.FullName.StartsWith ( args.Name ) )
-        {
-          return Assembly.Load ( referencedAssembly.FullName );
-        }
-      }
-      string path = File.Exists (args.Name) ? Path.GetFullPath ( args.Name ) : String.Empty;
-      string shortName = args.Name;
-      
-      if ( String.Empty == path )
-      {
-        return Assembly.Load ( shortName );
-      }
-      else
-      {
-        return Assembly.LoadFrom ( path );
-      }
-      
-    }
-    */
   }
 }
