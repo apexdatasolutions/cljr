@@ -7,6 +7,7 @@ using clojure.clr.api;
 using CljLang = clojure.lang;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace cljr.runtime
 {
@@ -18,24 +19,55 @@ namespace cljr.runtime
 
     public static void Run ( string entryPoint, string [] args )
     {
+      string originalDirectory = Directory.GetCurrentDirectory();
+
+      if (Deps.Check())
+      {
+        Deps.LoadDeps();
+        if (Deps.SourcePaths.Count > 0)
+        {
+          string subdir =
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Deps.SourcePaths[0].Replace("/", "\\")
+            : Deps.SourcePaths[0];
+          string path = Path.Combine(originalDirectory, subdir);
+          Directory.SetCurrentDirectory(path);
+        }
+      }
+
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
       CljLang.RT.Init ();
       REQUIRE.invoke ( CLOJURE_MAIN );
-      if ( Deps.Check() )
-      {
-        Deps.LoadDeps();
-      }
+      
       List<String> actualArgs = new List<String> ();
       actualArgs.Add ( "-m" );
       actualArgs.Add ( entryPoint );
       actualArgs.AddRange ( args );
       MAIN.applyTo ( CljLang.RT.seq ( actualArgs.ToArray () ) );
+
+      Directory.SetCurrentDirectory(originalDirectory);
     }
 
     public static void REPL ( string [] args )
     {
+      string originalDirectory = Directory.GetCurrentDirectory();
+
+      if (Deps.Check())
+      {
+        Deps.LoadDeps();
+        if ( Deps.SourcePaths.Count > 0 )
+        {
+          string subdir = 
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
+            ? Deps.SourcePaths[0].Replace("/", "\\") 
+            : Deps.SourcePaths[0];
+          string path  = Path.Combine (originalDirectory, subdir);
+          Directory.SetCurrentDirectory(path);
+        }
+      }
+
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
@@ -43,10 +75,7 @@ namespace cljr.runtime
       try
       {
         CljLang.RT.Init ();
-        if (Deps.Check())
-        {
-          Deps.LoadDeps();
-        }
+        
         REQUIRE.invoke ( CLOJURE_MAIN );
         MAIN.applyTo ( CljLang.RT.seq ( args ) );
       }
@@ -56,6 +85,7 @@ namespace cljr.runtime
         Console.WriteLine ( "Restarting the REPL..." );
         goto restart;
       }
+      Directory.SetCurrentDirectory (originalDirectory);
     }
 
     public static void Compile ( string [] libs )
@@ -63,6 +93,23 @@ namespace cljr.runtime
 #if NET5_0_OR_GREATER
       Console.WriteLine ( "Compiling is not supported on .NET 5.0 or greater ...yet." );
 #else
+      if ( !Directory.Exists (DefaultBinaryPath) )
+      {
+        Directory.CreateDirectory(DefaultBinaryPath);
+      }
+      string originalDirectory = Directory.GetCurrentDirectory ();
+      if (Deps.Check())
+      {
+        if (Deps.SourcePaths.Count > 0)
+        {          
+          string subdir =
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Deps.SourcePaths[0].Replace("/", "\\")
+            : Deps.SourcePaths[0];
+          string newPath = Path.Combine(originalDirectory, subdir);
+          Directory.SetCurrentDirectory(newPath);
+        }
+      }
       const string PATH_PROP = "CLOJURE_COMPILE_PATH";
       const string REFLECTION_WARNING_PROP = "CLOJURE_COMPILE_WARN_ON_REFLECTION";
       const string UNCHECKED_MATH_PROP = "CLOJURE_COMPILE_UNCHECKED_MATH";
@@ -72,9 +119,9 @@ namespace cljr.runtime
       TextWriter outTW = (TextWriter)CljLang.RT.OutVar.deref();
       TextWriter errTW = CljLang.RT.errPrintWriter();
 
-      string path = Environment.GetEnvironmentVariable(PATH_PROP);
+      string compilePath = Environment.GetEnvironmentVariable(PATH_PROP);
 
-      path = path ?? DefaultBinaryPath;
+      compilePath = compilePath ?? DefaultBinaryPath;
 
       string warnVal =  Environment.GetEnvironmentVariable(REFLECTION_WARNING_PROP);
       bool warnOnReflection = warnVal == null ? false : warnVal.Equals("true");
@@ -93,7 +140,7 @@ namespace cljr.runtime
       try
       {
         CljLang.Var.pushThreadBindings ( CljLang.RT.map (
-            CljLang.Compiler.CompilePathVar, path,
+            CljLang.Compiler.CompilePathVar, compilePath,
             CljLang.RT.WarnOnReflectionVar, warnOnReflection,
             CljLang.RT.UncheckedMathVar, uncheckedMath
             ) );
@@ -106,7 +153,9 @@ namespace cljr.runtime
           {
             sw.Reset ();
             sw.Start ();
-            outTW.Write ( "Compiling {0} to {1}", lib, path );
+            //TODO: resolve the full path of the lib after frisking source paths and
+            // set current directory to the root of the first matching source path
+            outTW.Write ( "Compiling {0} to {1}", lib, compilePath );
             outTW.Flush ();
             CljLang.Compiler.CompileVar.invoke ( CljLang.Symbol.intern ( lib ) );
             sw.Stop ();
@@ -139,6 +188,7 @@ namespace cljr.runtime
           errTW.Flush ();
         }
       }
+      Directory.SetCurrentDirectory(originalDirectory);
 
 #endif 
 
