@@ -10,6 +10,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Security.Permissions;
 using System.Resources;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace cljr.runtime
 {
@@ -369,7 +370,26 @@ namespace cljr.runtime
         result = true;
         EvaluateDepsFileOrSource(DepsFileName);
       }
+      // todo: evaluate additional deps files?
       return result;
+    }
+
+    public static string AddLocalLoadPaths(string existingPaths)
+    {
+      if ( LocalDepsPaths.Count > 0 )
+      {
+        string finalPaths = "";
+        string dirChar = Path.DirectorySeparatorChar.ToString();
+        string pathSep = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ";" : ":";
+        
+        foreach (string path in SourcePaths )
+        {
+          finalPaths = finalPaths + path.Replace("/",dirChar) + pathSep;
+        }
+        finalPaths += existingPaths ?? "";
+        return finalPaths;
+      }
+      return existingPaths ;
     }
 
     /// <summary>

@@ -16,6 +16,22 @@ namespace cljr.runtime
     // assuming we're working from the root where deps.edn is...
     public static string DefaultBinaryPath = 
       Directory.GetCurrentDirectory() + "\\target\\assemblies\\";
+    public static string LOAD_PROP = "CLOJURE_LOAD_PATH";
+
+    public static string LoadPath = Environment.GetEnvironmentVariable(LOAD_PROP);
+
+    public static void SetClojureLoadPath ()
+    {
+      if (LoadPath == null)
+      {
+        LoadPath = "";
+      }
+      LoadPath = Deps.AddLocalLoadPaths(LoadPath);
+      if (LoadPath.Length > 0)
+      {
+        Environment.SetEnvironmentVariable(LOAD_PROP, LoadPath);
+      }
+    }
 
     public static void Run ( string entryPoint, string [] args )
     {
@@ -24,16 +40,8 @@ namespace cljr.runtime
       if (Deps.Check())
       {
         Deps.LoadDeps();
-        if (Deps.SourcePaths.Count > 0)
-        {
-          string subdir =
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? Deps.SourcePaths[0].Replace("/", "\\")
-            : Deps.SourcePaths[0];
-          string path = Path.Combine(originalDirectory, subdir);
-          Directory.SetCurrentDirectory(path);
-        }
       }
+      SetClojureLoadPath();
 
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
@@ -57,17 +65,8 @@ namespace cljr.runtime
       if (Deps.Check())
       {
         Deps.LoadDeps();
-        if ( Deps.SourcePaths.Count > 0 )
-        {
-          string subdir = 
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
-            ? Deps.SourcePaths[0].Replace("/", "\\") 
-            : Deps.SourcePaths[0];
-          string path  = Path.Combine (originalDirectory, subdir);
-          Directory.SetCurrentDirectory(path);
-        }
       }
-
+      SetClojureLoadPath();
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
@@ -98,21 +97,17 @@ namespace cljr.runtime
         Directory.CreateDirectory(DefaultBinaryPath);
       }
       string originalDirectory = Directory.GetCurrentDirectory ();
-      if (Deps.Check())
-      {
-        if (Deps.SourcePaths.Count > 0)
-        {          
-          string subdir =
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? Deps.SourcePaths[0].Replace("/", "\\")
-            : Deps.SourcePaths[0];
-          string newPath = Path.Combine(originalDirectory, subdir);
-          Directory.SetCurrentDirectory(newPath);
-        }
-      }
+
+      
       const string PATH_PROP = "CLOJURE_COMPILE_PATH";
       const string REFLECTION_WARNING_PROP = "CLOJURE_COMPILE_WARN_ON_REFLECTION";
       const string UNCHECKED_MATH_PROP = "CLOJURE_COMPILE_UNCHECKED_MATH";
+
+      if (Deps.Check())
+      {
+        Deps.LoadDeps();
+      }
+      SetClojureLoadPath();
 
       CljLang.RT.Init ();
 
