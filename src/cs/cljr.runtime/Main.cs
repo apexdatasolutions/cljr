@@ -70,11 +70,10 @@ namespace cljr.runtime
       CljLang.Symbol CLOJURE_MAIN = CljLang.Symbol.intern( "clojure.main" );
       CljLang.Var REQUIRE = CljLang.RT.var( "clojure.core", "require" );
       CljLang.Var MAIN = CljLang.RT.var( "clojure.main", "main" );
+      CljLang.RT.Init();
     restart:
       try
-      {
-        CljLang.RT.Init ();
-        
+      {        
         REQUIRE.invoke ( CLOJURE_MAIN );
         MAIN.applyTo ( CljLang.RT.seq ( args ) );
       }
