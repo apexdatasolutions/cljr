@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Deps.cs" Link="Deps.cs" />
-    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Main.cs" Link="Main.cs" />
-    <Compile Include="C:\projects\dotnet\cljr\src\cs\cljr.runtime\Source.cs" Link="Source.cs" />
+    <Compile Include="..\..\..\..\src\cs\cljr.runtime\Deps.cs" Link="Deps.cs" />
+    <Compile Include="..\..\..\..\src\cs\cljr.runtime\Main.cs" Link="Main.cs" />
+    <Compile Include="..\..\..\..\src\cs\cljr.runtime\Source.cs" Link="Source.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clojure" Version="1.12.0-alpha3" />
+    <PackageReference Include="Clojure" Version="1.12.0-alpha5" />
   </ItemGroup>
 
   <ItemGroup>
