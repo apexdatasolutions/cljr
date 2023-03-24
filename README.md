@@ -2,9 +2,9 @@
 
 A build tool for Clojure on the CLR that plays nice with .NET tooling but remains familiar if not outright friendly to mainline Clojurians.
 
-That is, it attempts to behave compatibly with  (though not identically to) mainline Clojure's Deps/CLI tooling, while at the same time working with .NET tooling behind the schenes to manage the build process and load dependencies more or less "the .NET way."
+That is, it attempts to behave in a manner compatible with  (though not identically to) mainline Clojure's Deps/CLI tooling, while at the same time working with .NET tooling behind the scenes to manage the build process and load dependencies more or less "the .NET way."
 
-As a bridge betweent these two worlds, cljr hopes to make Clojure a first-class, highly productive alternative to other languages on the CLR while remaining inviting to mainline Clojure developers as well, for whom .NET may be _terra incognita_.
+As a bridge between these two worlds, cljr hopes to make Clojure a first-class, highly productive alternative to other languages on the CLR while remaining inviting to mainline Clojure developers as well, for whom .NET may be _terra incognita_.
 
 ## What's in the box
 
@@ -15,7 +15,7 @@ Two projects:
 
 There are also two solutions - one for .NET Framework (Windows only), and one for .NET Core. Which leads us to...
 
-## An important not about building cljr.exe and cljr.runtime.dll
+## An important note about building cljr.exe and cljr.runtime.dll
 
 There are two separate solutions, one for .NET framework, and one for .NET Core, in the `projects` directory. They both refer to the same source files in the `src` directory.
 
@@ -54,9 +54,9 @@ and here it is in `cljr.csproj` located at `projects/netframework/cljr/cljr.cspr
 
 `cljr.runtime.dll` projects in both solutions follow the same pattern.
 
-When the solutions are built, the output directories for the .NET Framework and .NET Core versions of `cljr.exe` can be put on the `PATH` in whatever order of preference one wishes for local testing purposes. Alternatively, separate comman prompt shortcuts can be created referring to batch files that set the `PATH` to the appropriate directory, depending on whether one wants to run the .NET Framework or .NET Core versions. Obviously, this problem exists only on Windows (unless one is using Mono to run the .NET Framework version on non-Windows platforms, of course).
+When the solutions are built, the output directories for the .NET Framework and .NET Core versions of `cljr.exe` can be put on the `PATH` in whatever order of preference one wishes for local testing purposes. Alternatively, separate command prompt shortcuts can be created referring to batch files that set the `PATH` to the appropriate directory, depending on whether one wants to run the .NET Framework or .NET Core versions. Obviously, this problem exists only on Windows (unless one is using Mono to run the .NET Framework version on non-Windows platforms, of course).
 
-Anyway, given the non-conventional layout of both solutions, it seemed wise to document this approach upfront. Criticisms and suggestions for more a more elegant structure are welcome. (Yes, we will change the name of `net6.0` folder and solution to `netcore` at some point. But we mean here that suggestions for a fundamentally better approach are also welcome.)
+Anyway, given the non-conventional layout of both solutions, it seemed wise to document this approach upfront. Criticisms and suggestions for a more elegant structure are welcome. (Yes, we will change the name of `net6.0` folder and solution to `netcore` at some point. But we mean here that suggestions for a fundamentally better approach are also welcome.)
 
 ## Using cljr.exe
 
@@ -145,7 +145,7 @@ These entry points all call `Deps` under the hood to interpret a `deps.edn` file
 
 ## Issues
 
-1. cljr is presently tightly coupled with the latest version of Clojure CLR, which as of this writing is 1.12.0-alpha5. Do not yet support indicating a different version in deps.edn. Partly this is because we wish to coordinate with the clojure-clr project to work out a path to closer alignment to `clj` feature-completeness, and partly it was because that's the best version for what cljr is trying to do, and we don't yet have legacy support issues.
+1. cljr is presently tightly coupled with the latest version of Clojure CLR, which as of this writing is 1.12.0-alpha5. `cljr` does not yet support indicating a different version in deps.edn. Partly this is because we wish to coordinate with the clojure-clr project to work out a path to closer alignment to `clj` feature-completeness, and partly it was because that's the best version for what cljr is trying to do, and we don't yet have legacy support issues.
 2. The fragmentation of .NET is a pain. We still need for our commercial projects support for .NET Framework but it's clear MS and many NuGet dependencies are moving toward .NET Core for the ultimate unification of the disparate runtimes. So things are a bit messy till the Big Convergence.
 3. .NET Framework runs faster than .NET Core because compilation at present cannot be done on .NET Core. This is because since .NET Core 3.1 or so MS removed the ability to save a compiled module to hard disk, for some reason. This is rumored to be returning in .NET Core 8, but presently if you want fast start up, you have to run on .NET Framework on Windows (or via Mono on other platforms).
 4. The current version only works with local assemblies on the harddrive via `:local/root`.
