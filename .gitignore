@@ -87,6 +87,8 @@ csx/
 # Windows Store app package directory
 AppPackages/
 
+.vscode
+
 # Others
 sql/
 *.Cache
