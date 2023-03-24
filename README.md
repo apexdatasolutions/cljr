@@ -154,7 +154,23 @@ These entry points all call `Deps` under the hood to interpret a `deps.edn` file
 
 ## deps.edn customization for CLR usage
 
-Coming soon!
+Example:
+
+```clojure
+{:paths ["src/main/" :another-project-dir]
+
+ :clr-deps
+ {Some.Local.Library {:local/root :some-local-dir}}
+
+ :clr-aliases
+ {:some-local-dir "C:\\libs\\"
+  :another-project-dir "C:\\projects\\another-project\\"}
+
+ :nuget/repos []
+ }
+```
+
+Currently only finding assemblies at some `:local/root` location on the harddrive is supported. The location can be supplied by an alias, and aliases that are directory reference can be added to the `:paths` key.
 
 ## Contributing
 
