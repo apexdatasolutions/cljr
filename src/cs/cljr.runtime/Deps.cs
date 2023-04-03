@@ -11,6 +11,7 @@ using System.Security.Permissions;
 using System.Resources;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 
 namespace cljr.runtime
 {
@@ -23,6 +24,7 @@ namespace cljr.runtime
     public static List<String> SourcePaths = new List<String>();
     public static List<String> LocalDepsPaths = new List<String>();
     public static Dictionary<String,Object> Aliases = new Dictionary<String,Object>();  
+    public static List<String> FrameworkAssemblies = new List<String>();
     public static AssemblyName[] ReferencedAssemblies =
         Assembly.GetExecutingAssembly().GetReferencedAssemblies();
 
@@ -51,6 +53,8 @@ namespace cljr.runtime
     // deps keywords
     public static Clojure.Keyword LocalRootKeyword =
       Clojure.Keyword.intern("local/root");
+    public static Clojure.Keyword LocalFrameworkKeyword =
+      Clojure.Keyword.intern("local/framework"); // this tells the system to attempt a partial name assembly load
     public static Clojure.Keyword GitUrlKeyword =
       Clojure.Keyword.intern("git/url");
     public static Clojure.Keyword GitTagKeyword =
@@ -221,6 +225,14 @@ namespace cljr.runtime
                   // what else might it be?
                 }
                 
+              }
+              else if ( valMap.ContainsKey (LocalFrameworkKeyword))
+              {
+                // todo: add to the framework assemblies
+                if (!FrameworkAssemblies.Contains((string)depKey))
+                {
+                  FrameworkAssemblies.Add((string)depKey);
+                }
               }
               else if ( valMap.ContainsKey (GitTagKeyword) )
               {
@@ -397,6 +409,19 @@ namespace cljr.runtime
     /// </summary>
     public static void LoadDeps()
     {
+      foreach (string assemblyName in FrameworkAssemblies)
+      {
+        try
+        {
+          Console.WriteLine("Loading System Assembly: " + assemblyName);
+          AssemblyName assembly = new AssemblyName(assemblyName);
+          Assembly.Load(assembly);
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine("ERROR: " + ex.Message);
+        }
+      }
       // For now, load them where we find them. In the future, perhaps move them to a local
       // directory from which everything can be run.
       foreach (string path in LocalDepsPaths)
