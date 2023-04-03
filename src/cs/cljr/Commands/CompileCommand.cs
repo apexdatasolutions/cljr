@@ -27,9 +27,9 @@ namespace cljr.Commands
       return compileCommand;
     }
 
-    public static void HandleCompileRequest ( string [] libs )
+    public static void HandleCompileRequest ( string [] namespaces )
     {
-      cljr.runtime.Main.Compile ( libs );
+      cljr.runtime.Main.Compile ( namespaces );
     }
   }
 }
